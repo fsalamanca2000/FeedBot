@@ -18,19 +18,25 @@ export class ChatComponent implements AfterViewChecked {
 
   constructor(private sentimentService: SentimentService) {}
 
-  sendMessage() {
-    const message = this.newMessage.trim();
-    if (message) {
-      this.messages.push({ text: message, type: 'user' });
+ sendMessage() {
+  const message = this.newMessage.trim();
+  if (message) {
+    this.messages.push({ text: message, type: 'user' });
 
-      this.sentimentService.analyzeSentiment(message).subscribe((response) => {
-        const sentiment = response.sentiment; // Ej: 'positivo', 'negativo', etc.
-        this.messages.push({ text: `Sentimiento: ${sentiment}`, type: 'bot' });
-      });
+    this.sentimentService.analyzeSentiment(message).subscribe((response) => {
+      const sentiment = response.sentiment;  // Ej: 'Neutral'
+      const reasons = response.reasons;      // Las razones en texto
 
-      this.newMessage = '';
-    }
+      // Puedes formatearlo en un solo mensaje o varios, aquí en uno solo
+      const botMessage = `Sentimiento: ${sentiment}\n Razones:\n ${reasons}`;
+
+      this.messages.push({ text: botMessage, type: 'bot' });
+    });
+
+    this.newMessage = '';
   }
+}
+
 
   ngAfterViewChecked() {
     this.scrollToBottom();
