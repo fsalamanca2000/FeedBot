@@ -1,27 +1,32 @@
 import { Component, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SentimentService } from '../services/sentiment.service';
+
 @Component({
   selector: 'app-chat',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
-  standalone: true
 })
 export class ChatComponent implements AfterViewChecked {
   @ViewChild('chatMessages') private chatMessagesContainer!: ElementRef;
 
-  // Tu array de mensajes y lógica de envío
   messages: { text: string; type: 'user' | 'bot' }[] = [];
   newMessage: string = '';
 
-  sendMessage() {
-    if (this.newMessage.trim()) {
-      this.messages.push({ text: this.newMessage, type: 'user' });
+  constructor(private sentimentService: SentimentService) {}
 
-      setTimeout(() => {
-        this.messages.push({ text: 'Respuesta del bot', type: 'bot' });
-      }, 500);
+  sendMessage() {
+    const message = this.newMessage.trim();
+    if (message) {
+      this.messages.push({ text: message, type: 'user' });
+
+      this.sentimentService.analyzeSentiment(message).subscribe((response) => {
+        const sentiment = response.sentiment; // Ej: 'positivo', 'negativo', etc.
+        this.messages.push({ text: `Sentimiento: ${sentiment}`, type: 'bot' });
+      });
 
       this.newMessage = '';
     }
@@ -33,7 +38,9 @@ export class ChatComponent implements AfterViewChecked {
 
   private scrollToBottom(): void {
     if (this.chatMessagesContainer) {
-      this.chatMessagesContainer.nativeElement.scrollTop = this.chatMessagesContainer.nativeElement.scrollHeight;
+      this.chatMessagesContainer.nativeElement.scrollTop =
+        this.chatMessagesContainer.nativeElement.scrollHeight;
     }
   }
 }
+
