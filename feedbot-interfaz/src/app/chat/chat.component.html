@@ -1,0 +1,25 @@
+<div class="chat-container">
+  <div class="chat-box">
+    <div class="chat-header">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Bot icon">
+      FeedBot
+    </div>
+
+  <div class="chat-messages" #chatMessages>
+    <div *ngFor="let msg of messages" class="message" [ngClass]="msg.type === 'user' ? 'user-message' : 'bot-message'">
+      {{ msg.text }}
+    </div>
+  </div>
+
+    <div class="chat-input">
+      <input [(ngModel)]="newMessage" placeholder="Escribe un mensaje..." (keydown.enter)="sendMessage()" />
+      <button (click)="sendMessage()" class="send-button">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M2 21l21-9L2 3v7l15 2-15 2z"/>
+        </svg>
+      </button>
+
+    </div>
+  </div>
+</div>
