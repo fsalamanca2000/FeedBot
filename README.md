@@ -21,6 +21,6 @@ npm install -g @angular/cli
 ```
 ## ✅ Paso 2: Abrir la carpeta del proyecto e iniciar el proyecto
 ```bash
-ng new feedbot-chat
-cd feedbot-chat
+ng new feedbot-interfaz
+cd feedbot-interfaz
 ng serve
