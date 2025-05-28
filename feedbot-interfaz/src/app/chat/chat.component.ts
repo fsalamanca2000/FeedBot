@@ -26,9 +26,10 @@ export class ChatComponent implements AfterViewChecked {
     this.sentimentService.analyzeSentiment(message).subscribe((response) => {
       const sentiment = response.sentiment;  // Ej: 'Neutral'
       const reasons = response.reasons;      // Las razones en texto
+      const recommendations=response.recommendations; // Las recomendaciones en texto
 
       // Puedes formatearlo en un solo mensaje o varios, aquí en uno solo
-      const botMessage = `Sentimiento: ${sentiment}\n Razones:\n ${reasons}`;
+      const botMessage = `Sentimiento: ${sentiment} \n Razones:\n ${reasons} Recomendaciones: \n  ${recommendations}`;
 
       this.messages.push({ text: botMessage, type: 'bot' });
     });
